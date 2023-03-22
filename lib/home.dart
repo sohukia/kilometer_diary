@@ -14,6 +14,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async => print(
+            await widget.databaseService.queryAllRows(),
+          ),
+          child: Text("GetValues"),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addValue,
         child: const Icon(Icons.add),
@@ -25,8 +33,15 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const CreateDataPage(),
+        builder: (context) => CreateDataPage(
+          databaseService: widget.databaseService,
+        ),
       ),
     );
+  }
+
+  Future<String> _loadValues() async {
+    final result = await widget.databaseService.queryAllRows();
+    return result[0]["date"];
   }
 }

@@ -36,7 +36,14 @@ class DatabaseService {
   }
 
   Future<List<Map<String, dynamic>>> queryAllRows() async {
-    return await _database.query(table);
+    var result = await _database.query(table);
+    result.forEach((element) {
+      element.update(
+          "date",
+          (value) => DateTime.parse(value
+              .toString())); // TODO: retreive informations from db in correct format
+    });
+    return result;
   }
 
   Future<int> queryRowCount() async {

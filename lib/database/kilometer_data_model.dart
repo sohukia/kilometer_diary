@@ -1,7 +1,7 @@
 class KilometerData {
   final int id;
   final double value;
-  final String date;
+  final DateTime date;
 
   KilometerData({
     required this.id,
@@ -12,7 +12,7 @@ class KilometerData {
   Map<String, dynamic> toMap() => {
         "id": id,
         "value": value,
-        "date": date,
+        "date": date.toString(),
       };
 
   @override
