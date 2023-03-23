@@ -1,3 +1,4 @@
+import 'package:kilometer_diary/database/kilometer_data_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -35,14 +36,30 @@ class DatabaseService {
     return await _database.insert(table, row);
   }
 
-  Future<List<Map<String, dynamic>>> queryAllRows() async {
-    var result = await _database.query(table);
-    result.forEach((element) {
-      element.update(
-          "date",
-          (value) => DateTime.parse(value
-              .toString())); // TODO: retreive informations from db in correct format
-    });
+  Future<List<KilometerData>> queryAllRows() async {
+    final result = await _database.query(table);
+    List<KilometerData> rows = [];
+
+    for (int i = 0; i < result.length; i++) {
+      KilometerData data = KilometerData(
+        id: int.parse(result[i]['id'].toString()),
+        value: double.parse(result[i]['value'].toString()),
+        date: DateTime.parse(result[i]['date'].toString()),
+      );
+
+      rows.add(data);
+    }
+    return rows;
+  }
+
+  Future<KilometerData> queryRow(int id) async {
+    final row =
+        await _database.rawQuery("SELECT * FROM $table WHERE $columnId = $id;");
+    KilometerData result = KilometerData(
+      id: id,
+      value: double.parse(row[0]['value'].toString()),
+      date: DateTime.parse(row[0]['date'].toString()),
+    );
     return result;
   }
 
