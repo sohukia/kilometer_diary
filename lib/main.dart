@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kilometer_diary/database/database_service.dart';
-import 'package:kilometer_diary/home.dart';
+import 'package:kilometer_diary/pages/home.dart';
 
 final databaseService = DatabaseService();
 void main() async {

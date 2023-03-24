@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kilometer_diary/database/database_service.dart';
 import 'package:kilometer_diary/database/kilometer_data_model.dart';
-import 'package:kilometer_diary/home.dart';
 
 class CreateDataPage extends StatefulWidget {
   final DatabaseService databaseService;
