@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kilometer_diary/database/kilometer_data_model.dart';
+import 'package:kilometer_diary/models/kilometer_data_model.dart';
+import 'package:kilometer_diary/pages/unit_kilometer_data_page.dart';
 
 class KilometerListElement extends StatelessWidget {
   final KilometerData kilometerData;
@@ -15,6 +16,13 @@ class KilometerListElement extends StatelessWidget {
     return ListTile(
       title: Text(value),
       subtitle: Text("On ${date.day}/${date.month}/${date.year}"),
+      onLongPress: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => UnitKilometerDataPage(data: kilometerData),
+          ),
+        );
+      },
     );
   }
 }
