@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kilometer_diary/models/kilometer_data_model.dart';
+import 'package:kilometer_diary/services/kilometers_service.dart';
 
 class UnitKilometerDataPage extends StatelessWidget {
   final KilometerData data;
@@ -19,8 +20,11 @@ class UnitKilometerDataPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () async => _delete(),
-              child: Text("Delete"),
+              onPressed: () async {
+                _delete();
+                Navigator.pop(context);
+              },
+              child: const Text("Delete"),
             ),
           ],
         ),
@@ -28,5 +32,7 @@ class UnitKilometerDataPage extends StatelessWidget {
     );
   }
 
-  Future<void> _delete() async {}
+  Future<void> _delete() async {
+    await KilometersService().deleteData(data.id);
+  }
 }

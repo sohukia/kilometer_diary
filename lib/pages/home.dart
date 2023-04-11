@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kilometer_diary/helper/database_helper.dart';
 import 'package:kilometer_diary/models/kilometer_data_model.dart';
 import 'package:kilometer_diary/services/kilometers_service.dart';
 import 'package:kilometer_diary/widgets/kilometer_list_element.dart';
@@ -21,12 +22,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    FocusScopeNode currentFocus = FocusScope.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Kilometer Diary"),
         centerTitle: true,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.remove))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              showAlertDialog(context);
+              setState(() {});
+            },
+            icon: const Icon(Icons.remove),
+          )
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -34,6 +43,12 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
               child: TextField(
+                onTap: () {
+                  currentFocus.requestFocus();
+                },
+                onTapOutside: (event) {
+                  currentFocus.unfocus();
+                },
                 controller: _kilometersValueController,
                 decoration: const InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -85,10 +100,10 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: FutureBuilder(
-                  future: KilometersService().fetchTotal(),
+                  future: KilometersService().calcTotalDistance(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text("Total distance : $totalRun km");
+                      return Text("Total distance : ${snapshot.data} km");
                     } else {
                       return const Text("No runs yet !");
                     }
@@ -138,9 +153,43 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
+          setState(() {});
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Confirm"),
+      onPressed: () {
+        DatabaseHelper.clearTable(DatabaseHelper.kilometerTable);
+        Navigator.pop(context);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Delete all data"),
+      content: const Text("Are you sure you want to delete all data?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
