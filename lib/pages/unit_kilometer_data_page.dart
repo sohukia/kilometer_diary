@@ -19,6 +19,7 @@ class UnitKilometerDataPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(data.value.toString()),
             ElevatedButton(
               onPressed: () async {
                 _delete();
