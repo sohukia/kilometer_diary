@@ -1,3 +1,3 @@
 # kilometer_diary
 
-A new Flutter project.
+store your kilometer as you ride and learn.
